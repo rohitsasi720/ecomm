@@ -2,8 +2,16 @@
 @section('content')
 
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+
+<div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4>
+                          Product Details
+                        </h4>
+<button type="button" class="btn" style="background-color:black; color:white;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
   Add Product
 </button>
 
@@ -47,16 +55,6 @@
     </div>
   </div>
 </div>
-
-
-<div class="container mt-4">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Product Details
-                            <a href="#" class="btn btn-primary float-end">Add Product</a>
-                        </h4>
                     </div>
 <div class="card-body">
 
