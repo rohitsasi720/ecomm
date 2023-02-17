@@ -14,12 +14,4 @@ use App\Http\Controllers\mycontroller;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::post('insertData', [mycontroller::class, 'insert']);
-Route::get('/', [mycontroller::class,'readdata']);
-//Route::view('update','updateview');
-Route::get('edit/{id}', [mycontroller::class, 'updateordelete']);
-Route::get('updatedata',[mycontroller::class,'update']);
+Route::resource('products', mycontroller::class);

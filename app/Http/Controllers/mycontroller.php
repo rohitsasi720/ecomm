@@ -7,114 +7,91 @@ use App\Models\product;
 
 class mycontroller extends Controller
 {
-    function insert(Request $req)
+    public function index()
     {
-        $name = $req->get('pname');
-        $price = $req->get('pprice');
-        $category = $req->get('category');
-        $image = $req->file('image')->getClientOriginalName();
-        //move uploaded file
-        $req->image->move(public_path('images'), $image);
+        $products = product::latest()->paginate(5);
 
-        $prod = new product();
-        $prod->PName = $name;
-        $prod->PPrice = $price;
-        $prod->PCategory = $category;
-        $prod->PImage = $image;
-        $prod->save();
-        return redirect('/');
+        return view('products.index', compact('products'))
+        ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-    function readdata()
+    
+    public function create()
     {
-        $pdata = product::all();
-        return view('insertRead', ['data' => $pdata]);
+        return view('products.create');
     }
 
-    function updateordelete(Request $req, $id)
+    
+    public function store(Request $request)
     {
-        $prod = product::find($id);
-       
-        $id = $prod->Id;
-        $name = $prod->PName;
-        $price = $prod->PPrice;
-        $category = $prod->PCategory;
-        $image = $prod->PImage;
-        
-        if ($req->get('upd') == 'Update') {
-            return view('updateview', ['pid' => $id, 'pname' => $name, 'pprice' => $price, 'category' => $category, 'image' => $image]);
+        $request->validate([
+            'name' => 'required',
+            'category' => 'required',
+            'price' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $input = $request->all();
+
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['image'] = "$profileImage";
         }
 
-        if ($req->get('view') == 'View') {
-            return view('preview', ['pname' => $name, 'pprice' => $price, 'category' => $category, 'image' => $image]);
+        product::create($input);
+
+        return redirect()->route('products.index')
+        ->with('success', 'Product created successfully.');
+    }
+
+    
+    public function show(product $product)
+    {
+        return view('products.show', compact('product'));
+    }
+
+    
+    public function edit(product $product)
+    {
+        return view('products.edit', compact('product'));
+    }
+
+    
+    public function update(Request $request, product $product)
+    {
+        $request->validate([
+            'name' => 'required',
+            'category' => 'required',
+            'price' => 'required'
+        ]);
+
+        $input = $request->all();
+
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['image'] = "$profileImage";
         } 
-        
         else {
-            $prod->delete();
+            unset($input['image']);
         }
-        
-         return redirect('/');
-        
-        
-        
-        
-        
-        
-        // $id = $req->get('id');
-        // $name = $req->get('name');
-        // $price = $req->get('price');
-        // $category = $req->get('category');
-        // $image = $req->file('image');
 
-        // if ($req->get('upd') == 'Update') {
-        //     return view('updateview', ['pid' => $id, 'pname' => $name, 'pprice' => $price, 'category' => $category, 'image' => $image]);
-        // }
-        
-        // if ($req->get('view') == 'View') {
-        //     $prod = product::find($id);
-        //     $image = $prod->PImage;
-        //     return view('preview', ['pname' => $name, 'pprice' => $price, 'category' => $category, 'image' => $image]);
-        // } else {
-        //     $prod = product::find($id);
-        //     $prod->delete();
-        // }
-        // return redirect('/');
+        $product->update($input);
+
+        return redirect()->route('products.index')
+        ->with('success', 'Product updated successfully');
     }
 
-    function update(Request $req)
+    
+    public function destroy(product $product)
     {
-        $id = $req->get('id');
-        $name = $req->get('name');
-        $price = $req->get('price');
-        $category = $req->get('category');
-        $prod = product::find($id);
-        dd($req->hasFile('image'));
+        $product->delete();
 
-        if ($req->hasFile('image')) {
-            $image = $req->file('image')->getClientOriginalName();
-            // move the uploaded file to public path
-            $req->image->move(public_path('images'), $image);
-            $prod->PImage = $image;
-        }
-
-        $prod->PName = $name;
-        $prod->PPrice = $price;
-        $prod->PCategory = $category;
-        $prod->save();
-        return redirect('/');
+        return redirect()->route('products.index')
+        ->with('success', 'Product deleted successfully');
     }
 
-    function preview(Request $req)
-    {
-        $id = $req->get('id');
-        $prod = product::find($id);
-        $name = $prod->PName;
-        $price = $prod->PPrice;
-        $category = $prod->PCategory;
-        $image = $prod->PImage;
-
-        if ($req->get('view') == 'View') {
-            return view('preview', ['pname' => $name, 'pprice' => $price, 'category' => $category, 'image' => $image]);
-        }
-    }
 }
