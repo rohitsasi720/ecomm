@@ -10,7 +10,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
-        <a class="navbar-brand" style="color: white; font-size: 1.6em;" href="#">Ecom</a>
+        <a class="navbar-brand" style="color: white; font-size: 1.6em;" href="/">Ecom</a>
         </div>
     </nav>
     @yield('content')
