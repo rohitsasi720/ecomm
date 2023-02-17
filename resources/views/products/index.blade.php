@@ -8,6 +8,9 @@
             </div>
         </div>
     </div>
+    <button type="button" class="btn btn-info my-2" data-toggle="dropdown">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart <span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
+                </button>
     
     @if ($message = Session::get('success'))
         <div class="alert alert-success">
@@ -22,6 +25,7 @@
             <th>Category</th>
             <th>Price</th>
             <th>Image</th>
+            <th></th>
             <th width="280px">RUD Operation</th>
         </tr>
         @foreach ($products as $product)
@@ -31,6 +35,7 @@
             <td>{{ $product->category }}</td>
             <td>{{ $product->price }}</td>
             <td><img src="/images/{{ $product->image }}" width="100px"></td>
+            <td><p class="btn-holder"><a href="{{ route('add.to.cart', $product->id) }}" class="btn btn-warning btn-block text-center" role="button">Add to cart</a> </p></td>
             <td>
                 {{-- <input type="hidden" name="product" value="{{ $product }}"> --}}
                 <form action="{{ route('products.destroy',$product->id) }}" method="POST">

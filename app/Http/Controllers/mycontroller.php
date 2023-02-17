@@ -94,4 +94,31 @@ class mycontroller extends Controller
         ->with('success', 'Product deleted successfully');
     }
 
+    public function cart()
+    {
+        return view('cart');
+    }
+
+    public function addToCart($id)
+    {
+        $product = product::findOrFail($id);
+
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$id])) {
+            $cart[$id]['quantity']++;
+        } 
+        else {
+            $cart[$id] = [
+                "name" => $product->name,
+                "quantity" => 1,
+                "price" => $product->price,
+                "image" => $product->image
+            ];
+        }
+
+        session()->put('cart', $cart);
+        return redirect()->back()->with('success', 'Product added to cart successfully!');
+    }
+    
 }

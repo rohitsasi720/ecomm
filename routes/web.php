@@ -15,3 +15,6 @@ use App\Http\Controllers\mycontroller;
 */
 
 Route::resource('products', mycontroller::class);
+
+Route::get('cart', [mycontroller::class, 'cart'])->name('cart');
+Route::get('add-to-cart/{id}', [mycontroller::class, 'addToCart'])->name('add.to.cart');
