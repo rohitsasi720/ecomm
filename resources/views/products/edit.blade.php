@@ -49,7 +49,7 @@
              <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Price:</strong>
-                    <input type="number" min="0" name="name" value="{{ $product->price }}" class="form-control" placeholder="Price">
+                    <input type="number" min="0" name="price" value="{{ $product->price }}" class="form-control" placeholder="Price">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12">

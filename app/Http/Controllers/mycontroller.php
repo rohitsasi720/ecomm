@@ -74,7 +74,16 @@ class mycontroller extends Controller
             $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $profileImage);
             $input['image'] = "$profileImage";
-        } 
+        }
+
+        // delete old image if exists
+        if ($product->image) {
+            $oldImagePath = public_path('images/' . $product->image);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+
         else {
             unset($input['image']);
         }
