@@ -1,6 +1,11 @@
 @extends('products.layout')
      
 @section('content')
+@if ($message = Session::get('created'))
+        <div class="alert alert-success my-2">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
     <div class="row">
         <div class="col-lg-12 margin-tb py-4">
             <div class="pull-right">
@@ -25,8 +30,10 @@
             <th>Category</th>
             <th>Price</th>
             <th>Image</th>
-            <th></th>
+            <th>Shop</th>
+            @if (auth()->check() && auth()->user()->admin)
             <th width="280px">RUD Operation</th>
+            @endif
         </tr>
         @foreach ($products as $product)
         <tr>
@@ -39,15 +46,15 @@
             <td>
                 {{-- <input type="hidden" name="product" value="{{ $product }}"> --}}
                 <form action="{{ route('products.destroy',$product->id) }}" method="POST">
-     
-                    <a class="btn btn-info" href="{{ route('products.show',$product->id) }}">Show</a>
-      
+     @if(auth()->check() && auth()->user()->admin)
+                    <a class="btn btn-info" href="{{ route('products.show',$product->id) }}">Show</a> 
                     <a class="btn btn-primary" href="{{ route('products.edit',$product->id) }}">Edit</a>
-     
+     @endif
                     @csrf
                     @method('DELETE')
-        
+     @if(auth()->check() && auth()->user()->admin)   
                     <button type="submit" class="btn btn-danger">Delete</button>
+     @endif
                 </form>
             </td>
         </tr>

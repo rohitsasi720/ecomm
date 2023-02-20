@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\mycontroller;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SessionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +20,11 @@ Route::resource('products', mycontroller::class);
 
 Route::get('cart', [mycontroller::class, 'cart'])->name('cart');
 Route::get('add-to-cart/{id}', [mycontroller::class, 'addToCart'])->name('add.to.cart');
+
+Route::get('register', [RegisterController::class, 'create'])->middleware('guest');
+Route::post('register', [RegisterController::class, 'store'])->middleware('guest');
+
+Route::get('login', [SessionsController::class, 'create'])->middleware('guest');
+Route::post('login', [SessionsController::class, 'store'])->middleware('guest');
+
+Route::post('logout', [SessionsController::class, 'destroy'])->middleware('auth');
