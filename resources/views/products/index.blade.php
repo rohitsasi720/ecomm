@@ -9,7 +9,9 @@
     <div class="row">
         <div class="col-lg-12 margin-tb py-4">
             <div class="pull-right">
+                @if (auth()->check() && auth()->user()->admin)
                 <a class="btn btn-success" href="{{ route('products.create') }}"> Create New Product</a>
+                @endif
             </div>
         </div>
     </div>
