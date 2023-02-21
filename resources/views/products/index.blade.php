@@ -13,6 +13,39 @@
                 <a class="btn btn-success" href="{{ route('products.create') }}"> Create New Product</a>
                 @endif
             </div>
+            @if (auth()->check() && auth()->user()->admin)
+            <div class="card shadow mb-4 my-2">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Import Products</h6>
+        </div>
+        <form method="POST" action="{{route('upload')}}" enctype="multipart/form-data">
+            @csrf
+            <div class="card-body">
+                <div class="form-group row">
+
+                    {{-- File Input --}}
+                    <div class="col-sm-12 mb-3 mt-3 mb-sm-0">
+                        <input 
+                            type="file" 
+                            class="form-control form-control-user @error('file') is-invalid @enderror" 
+                            id="exampleFile"
+                            name="file" 
+                            value="{{ old('file') }}" required>
+
+                        @error('file')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success btn-user float-right mb-3">Upload Products</button>
+            </div>
+        </form>
+    </div>
+@endif
         </div>
     </div>
     <button type="button" class="btn btn-info my-2" data-toggle="dropdown">
@@ -60,6 +93,6 @@
         @endforeach
     </table>
     
-    {!! $products->links() !!}
+    {!! $products->links('pagination::bootstrap-5') !!}
         
 @endsection

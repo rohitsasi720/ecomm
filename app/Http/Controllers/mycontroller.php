@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ProductImport;
 use Illuminate\Http\Request;
 use App\Models\product;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class mycontroller extends Controller
 {
@@ -128,6 +131,23 @@ class mycontroller extends Controller
 
         session()->put('cart', $cart);
         return redirect()->back()->with('success', 'Product added to cart successfully!');
+    }
+
+    public function importProduct(){
+        return view('products.index');
+    }
+
+    public function uploadProduct(Request $request){
+
+        if ($request->hasFile('file'))
+        {
+            Excel::import(new ProductImport, $request->file);
+            return redirect()->route('products.index')->with('success', 'Data imported successfully');   
+        }
+        else
+        {
+            return redirect()->back()->with('error', 'Please select a file to upload');
+        }  
     }
     
 }
