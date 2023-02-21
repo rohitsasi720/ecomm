@@ -47,17 +47,12 @@
             <td><p class="btn-holder"><a href="{{ route('add.to.cart', $product->id) }}" class="btn btn-warning btn-block text-center" role="button">Add to cart</a> </p></td>
             @if(auth()->check() && auth()->user()->admin)
             <td>
-                {{-- <input type="hidden" name="product" value="{{ $product }}"> --}}
                 <form action="{{ route('products.destroy',$product->id) }}" method="POST">
-    
                     <a class="btn btn-info" href="{{ route('products.show',$product->id) }}">Show</a> 
                     <a class="btn btn-primary" href="{{ route('products.edit',$product->id) }}">Edit</a>
-     {{-- @endif --}}
                     @csrf
                     @method('DELETE')
-     {{-- @if(auth()->check() && auth()->user()->admin)    --}}
                     <button type="submit" class="btn btn-danger">Delete</button>
-     {{-- @endif --}}
                 </form>
             </td>
             @endif
