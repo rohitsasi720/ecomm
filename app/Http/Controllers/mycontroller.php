@@ -43,6 +43,13 @@ class mycontroller extends Controller
             $input['image'] = "$profileImage";
         }
 
+        $name = $request->input('name');
+
+        $existingProduct = product::where('name', $name)->first();
+        if ($existingProduct) {
+            $input['name'] = $name . '-' . $existingProduct->id;
+        }
+        
         product::create($input);
 
         return redirect()->route('products.index')

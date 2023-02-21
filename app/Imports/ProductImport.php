@@ -14,7 +14,7 @@ class ProductImport implements ToModel, WithHeadingRow
 
     public function __construct()
     {
-        $this->existingProducts = DB::table('products')->pluck('name', 'id');
+        $this->existingProducts = DB::table('products')->pluck('name');
     }
 
 
@@ -25,11 +25,11 @@ class ProductImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
+   
         $name = $row['name'];
 
         if ($this->existingProducts->contains($name)) {
-            $id = $this->existingProducts->search($name);
-            $name = $name . '-' . $id;
+            return null;
         }
 
         return new product([
