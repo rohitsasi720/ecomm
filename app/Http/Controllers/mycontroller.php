@@ -47,10 +47,13 @@ class mycontroller extends Controller
 
         $existingProduct = product::where('name', $name)->first();
 
-        $newProduct = product::create($input);
+        $newProduct = Product::create($input);
 
         if ($existingProduct) {
-            $newProduct->update(['name' => $input['name'] . '-' . $newProduct->id]);
+            $newProduct->update(['handle' => str_replace(' ', '-', $name) . '-' . $existingProduct->id]);
+        } else {
+            $input['handle'] = str_replace(' ', '-', $input['name']);
+            $newProduct->update($input);
         }
 
         return redirect()->route('products.index')
@@ -87,7 +90,7 @@ class mycontroller extends Controller
             $input['image'] = "$profileImage";
         }
 
-        // delete old image if exists
+        
         if ($product->image) {
             $oldImagePath = public_path('images/' . $product->image);
             if (file_exists($oldImagePath)) {

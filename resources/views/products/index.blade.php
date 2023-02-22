@@ -61,6 +61,7 @@
     <table class="table table-bordered">
         <tr>
             <th>No</th>
+            <th>Handle</th>
             <th>Name</th>
             <th>Category</th>
             <th>Price</th>
@@ -73,6 +74,7 @@
         @foreach ($products as $product)
         <tr>
             <td>{{ ++$i }}</td>
+            <td>{{ $product->handle }}</td>
             <td>{{ $product->name }}</td>
             <td>{{ $product->category }}</td>
             <td>{{ $product->price }}</td>
