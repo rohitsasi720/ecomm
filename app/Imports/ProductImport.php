@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
 
-class ProductImport implements ToModel, WithHeadingRow
+class ProductImport implements ToModel, WithHeadingRow, WithBatchInserts
+
 {
 
     protected $existingProducts;
@@ -43,4 +45,11 @@ class ProductImport implements ToModel, WithHeadingRow
             "handle" => $handle
         ]);
     }
+
+    public function batchSize(): int
+    {
+        return 10;
+    }
+
+
 }
