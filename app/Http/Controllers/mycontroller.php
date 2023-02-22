@@ -6,6 +6,7 @@ use App\Imports\ProductImport;
 use Illuminate\Http\Request;
 use App\Models\product;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 
 
 class mycontroller extends Controller
@@ -50,10 +51,10 @@ class mycontroller extends Controller
         $newProduct = Product::create($input);
 
         if ($existingProduct) {
-            $newProduct->update(['handle' => str_replace(' ', '-', $name) . '-' . $newProduct->id]);
-        } else {
-            $input['handle'] = str_replace(' ', '-', $input['name']);
-            $newProduct->update($input);
+            $newProduct->update(['handle' => Str::slug($name)  . '-' . $newProduct->id]);
+        } 
+        else{
+            $newProduct->update(['handle' => Str::slug($name)]);
         }
 
         return redirect()->route('products.index')

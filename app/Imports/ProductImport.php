@@ -6,6 +6,8 @@ use App\Models\product;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Str;
+
 
 class ProductImport implements ToModel, WithHeadingRow
 {
@@ -25,18 +27,20 @@ class ProductImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-   
         $name = $row['name'];
 
         if ($this->existingProducts->contains($name)) {
             return null;
         }
 
+        $handle = Str::slug($name);
+        
         return new product([
             "name" => $name,
             "price" => $row['price'],
             "category" => $row['category'],
-            "image" => $row['image']
+            "image" => $row['image'],
+            "handle" => $handle
         ]);
     }
 }
