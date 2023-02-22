@@ -108,6 +108,13 @@ class mycontroller extends Controller
     
     public function destroy(product $product)
     {
+        if ($product->image) {
+            $imagePath = public_path('images/' . $product->image);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+        
         $product->delete();
 
         return redirect()->route('products.index')
