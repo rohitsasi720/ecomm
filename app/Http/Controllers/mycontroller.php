@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ProductImport;
 use Illuminate\Http\Request;
 use App\Models\product;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class mycontroller extends Controller
 {
@@ -40,7 +43,18 @@ class mycontroller extends Controller
             $input['image'] = "$profileImage";
         }
 
-        product::create($input);
+        $name = $request->input('name');
+
+        $existingProduct = product::where('name', $name)->first();
+
+        $newProduct = Product::create($input);
+
+        if ($existingProduct) {
+            $newProduct->update(['handle' => str_replace(' ', '-', $name) . '-' . $newProduct->id]);
+        } else {
+            $input['handle'] = str_replace(' ', '-', $input['name']);
+            $newProduct->update($input);
+        }
 
         return redirect()->route('products.index')
         ->with('success', 'Product created successfully.');
@@ -76,7 +90,7 @@ class mycontroller extends Controller
             $input['image'] = "$profileImage";
         }
 
-        // delete old image if exists
+        
         if ($product->image) {
             $oldImagePath = public_path('images/' . $product->image);
             if (file_exists($oldImagePath)) {
@@ -97,6 +111,13 @@ class mycontroller extends Controller
     
     public function destroy(product $product)
     {
+        if ($product->image) {
+            $imagePath = public_path('images/' . $product->image);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+        
         $product->delete();
 
         return redirect()->route('products.index')
@@ -128,6 +149,23 @@ class mycontroller extends Controller
 
         session()->put('cart', $cart);
         return redirect()->back()->with('success', 'Product added to cart successfully!');
+    }
+
+    public function importProduct(){
+        return view('products.index');
+    }
+
+    public function uploadProduct(Request $request){
+
+        if ($request->hasFile('file'))
+        {
+            Excel::import(new ProductImport, $request->file);
+            return redirect()->route('products.index')->with('success', 'Data imported successfully');   
+        }
+        else
+        {
+            return redirect()->back()->with('error', 'Please select a file to upload');
+        }  
     }
     
 }
