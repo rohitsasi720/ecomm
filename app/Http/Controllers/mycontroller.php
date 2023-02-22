@@ -50,7 +50,7 @@ class mycontroller extends Controller
         $newProduct = Product::create($input);
 
         if ($existingProduct) {
-            $newProduct->update(['handle' => str_replace(' ', '-', $name) . '-' . $existingProduct->id]);
+            $newProduct->update(['handle' => str_replace(' ', '-', $name) . '-' . $newProduct->id]);
         } else {
             $input['handle'] = str_replace(' ', '-', $input['name']);
             $newProduct->update($input);
