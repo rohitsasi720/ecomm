@@ -46,11 +46,12 @@ class mycontroller extends Controller
         $name = $request->input('name');
 
         $existingProduct = product::where('name', $name)->first();
+
+        $newProduct = product::create($input);
+
         if ($existingProduct) {
-            $input['name'] = $name . '-' . $existingProduct->id;
+            $newProduct->update(['name' => $input['name'] . '-' . $newProduct->id]);
         }
-        
-        product::create($input);
 
         return redirect()->route('products.index')
         ->with('success', 'Product created successfully.');
