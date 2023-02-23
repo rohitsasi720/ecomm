@@ -160,7 +160,7 @@ class mycontroller extends Controller
 
         if ($request->hasFile('file'))
         {
-            Excel::import(new ProductImport, $request->file);
+            Excel::queueImport(new ProductImport, $request->file);
             return redirect()->route('products.index')->with('success', 'Data imported successfully');   
         }
         else

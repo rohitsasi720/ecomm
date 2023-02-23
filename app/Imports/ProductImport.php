@@ -3,14 +3,15 @@
 namespace App\Imports;
 
 use App\Models\product;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-
-class ProductImport implements ToModel, WithHeadingRow, WithBatchInserts
+class ProductImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQueue
 
 {
 
@@ -46,10 +47,14 @@ class ProductImport implements ToModel, WithHeadingRow, WithBatchInserts
         ]);
     }
 
-    public function batchSize(): int
+    // public function batchSize(): int
+    // {
+    //     return 10;
+    // }
+
+    public function chunkSize(): int
     {
         return 10;
     }
-
 
 }
